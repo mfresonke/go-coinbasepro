@@ -12,6 +12,14 @@ type Account struct {
 	Currency  string `json:"currency"`
 }
 
+type CoinbaseAccount struct {
+	ID       string `json:"id"`
+	Name     string `json:"name"` // "My Wallet"
+	Primary  bool   `json:"primary"`
+	Type     string `json:"type"`     // "wallet"
+	Currency string `json:"currency"` // XTZ
+}
+
 // Ledger
 
 type LedgerEntry struct {
@@ -62,6 +70,13 @@ func (c *Client) GetAccount(id string) (Account, error) {
 	url := fmt.Sprintf("/accounts/%s", id)
 	_, err := c.Request("GET", url, nil, &account)
 	return account, err
+}
+
+func (c *Client) GetCoinbaseAccounts() ([]CoinbaseAccount, error) {
+	var accounts []CoinbaseAccount
+	_, err := c.Request("GET", "/coinbase-accounts", nil, &accounts)
+
+	return accounts, err
 }
 
 func (c *Client) ListAccountLedger(id string,
